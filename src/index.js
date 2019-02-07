@@ -1,14 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import Button from 'react-bootstrap/Button';
+import AppTemplate from './components/AppTemplate'
 
-const App = () =>(
+const App = () => (
     <div>
-        Hello world!!!!!!!!!!!!!!!!!!!!!!!!!!
+        <div>
+            <AppTemplate />
+        </div>
     </div>
 )
 
 
 ReactDOM.render(
-    <App/>,
+    <App />,
     document.getElementById('root')
 )
