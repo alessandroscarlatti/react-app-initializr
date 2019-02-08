@@ -13,46 +13,21 @@ import ActivityNavbarComponent from './ActivityNavbarComponent';
 
 export default class AppNavbar extends React.Component {
     render() {
-
         // has a list of props for all the pages...
-        let activityLinks = [];
+        let navbarComponents = [];
+        if (this.props.navbarComponents != null)
+            navbarComponents = this.props.navbarComponents;
 
-        if (this.props.children != null) {
-            this.props.children.forEach(child => {
-                if (child.type === ActivityNavbarComponent) {
-                    activityLinks.push(child);
-                }
-                if (child.constructor.name === "Array") {
-                    child.forEach(grandchild => {
-                        if (grandchild.type === ActivityNavbarComponent) {
-                            activityLinks.push(grandchild);
-                        }
-                    });
-                }
-             });
-        }
+        let navbarLinks = [...navbarComponents]
 
         return (
             <Navbar>
-                <Navbar.Brand href="#home">App</Navbar.Brand>
+                <Navbar.Brand href="#/">App</Navbar.Brand>
                 <Navbar.Brand>local</Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="mr-auto">
-                        
-                        {activityLinks}
-
-                        <Nav.Item>
-                            <Form inline>
-                                <InputGroup>
-                                    <FormControl type="text" placeholder="Search" />
-                                    <InputGroup.Append>
-                                        <Button variant="outline-success">Search</Button>
-                                    </InputGroup.Append>
-                                </InputGroup>
-                            </Form>
-
-                        </Nav.Item>
+                        {navbarLinks}
                     </Nav>
 
                     <Nav className="mr-sm-2">

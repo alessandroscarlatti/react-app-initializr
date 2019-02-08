@@ -7,32 +7,23 @@ export default class AppTemplate extends React.Component {
 
     render() {
 
-        let activityContent = null;
-        let activityNavbarComponents = [];
+        let activityContent = this.props.children;
 
-        this.props.children.forEach(child => {
-            if (child.type === AppActivity) {
-                activityContent = child;
-            }
-            if (child.type === ActivityNavbarComponent) {
-                activityNavbarComponent.push(child);
-            }
-            if (child.constructor.name === "Array") {
-                child.forEach(grandchild => {
-                    if (grandchild.type === ActivityNavbarComponent) {
-                        activityNavbarComponents.push(grandchild);
+        if (this.props.children != null) {
+            if (this.props.children.constructor.name === "Array") {
+                this.props.children.forEach(child => {
+                    if (child.type === AppActivity) {
+                        activityContent = child;
                     }
-                });
+                })
             }
-        })
+        }
 
         return (
             <div>
-                <AppNavbar>
-                    {activityNavbarComponents}
-                </AppNavbar>
+                <AppNavbar navbarComponents={this.props.navbarComponents} />
                 <div>
-                    {activityContent}
+                    {this.props.children}
                 </div>
             </div>
         )
