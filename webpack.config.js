@@ -17,6 +17,7 @@ module.exports = {
     devServer: {
         port: 3000
     },
+    devtool: "source-map",
     plugins:[
         new hwp({template:path.join(__dirname, '/src/index.html')})
     ]

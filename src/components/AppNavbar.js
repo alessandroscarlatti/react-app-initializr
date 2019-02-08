@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import Dropdown from 'react-bootstrap/Dropdown'
 import DropdownButton from 'react-bootstrap/DropdownButton'
 import Navbar from 'react-bootstrap/Navbar'
@@ -10,9 +9,29 @@ import Form from 'react-bootstrap/Form'
 import InputGroup from 'react-bootstrap/InputGroup'
 import FormControl from 'react-bootstrap/FormControl'
 import Image from 'react-bootstrap/Image'
+import ActivityNavbarComponent from './ActivityNavbarComponent';
 
 export default class AppNavbar extends React.Component {
     render() {
+
+        // has a list of props for all the pages...
+        let activityLinks = [];
+
+        if (this.props.children != null) {
+            this.props.children.forEach(child => {
+                if (child.type === ActivityNavbarComponent) {
+                    activityLinks.push(child);
+                }
+                if (child.constructor.name === "Array") {
+                    child.forEach(grandchild => {
+                        if (grandchild.type === ActivityNavbarComponent) {
+                            activityLinks.push(grandchild);
+                        }
+                    });
+                }
+             });
+        }
+
         return (
             <Navbar>
                 <Navbar.Brand href="#home">App</Navbar.Brand>
@@ -20,17 +39,8 @@ export default class AppNavbar extends React.Component {
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="mr-auto">
-                        {/* <Nav.Link href="#home">Home</Nav.Link>
-                        <Nav.Link href="#link">Link</Nav.Link>
-                        <Nav.Item>
-                            <NavDropdown title="Dropdown" id="basic-nav-dropdown">
-                                <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-                                <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
-                                <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
-                                <NavDropdown.Divider />
-                                <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
-                            </NavDropdown>
-                        </Nav.Item> */}
+                        
+                        {activityLinks}
 
                         <Nav.Item>
                             <Form inline>
