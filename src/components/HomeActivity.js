@@ -13,6 +13,6 @@ export default {
     id: "homePage",
     prettyName: "Home Page",
     route: "/",
-    activityComponent: activityComponent(),
-    navbarComponent: navbarComponent()
+    activityComponent: activityComponent,
+    navbarComponent: navbarComponent
 }
