@@ -6,10 +6,6 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Alert from 'react-bootstrap/Alert';
 
-const navbarComponent = () => (
-    <Button variant="link" href="#/login">Login</Button>
-);
-
 function login(url = ``, params = {}) {
 
     let formData = new FormData();
@@ -21,7 +17,7 @@ function login(url = ``, params = {}) {
         method: "POST", // *GET, POST, PUT, DELETE, etc.
         mode: "cors", // no-cors, cors, *same-origin
         cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-        credentials: "omit", // include, *same-origin, omit
+        credentials: "include", // include, *same-origin, omit
         headers: {
             // "Content-Type": "application/x-www-form-urlencoded",
         },
@@ -33,6 +29,16 @@ function login(url = ``, params = {}) {
 
 function isAuthenticationSuccess(response) {
     return (!response.url.endsWith("login?error"));
+}
+
+function testAuthentication() {
+    fetch("/secret.html")
+    .then(response => {
+        console.log("response:", response);
+    })
+    .catch(response => {
+        console.error("response:", response);
+    })
 }
 
 class LoginForm extends React.Component {
@@ -111,14 +117,14 @@ class LoginForm extends React.Component {
                                 {
                                     this.state.status === "SUCCESS" ? (
                                         <Form.Group>
-                                            <Alert variant="success">You are logged in.</Alert>
+                                            <Alert variant="success"><span className="fas fa-check mr-1" /> You are logged in.</Alert>
                                         </Form.Group>
                                     ) : null
                                 }
                                 {
                                     this.state.status === "ERROR" ? (
                                         <Form.Group>
-                                            <Alert variant="danger">Error logging in. Please try again.</Alert>
+                                            <Alert variant="danger"><span className="fas fa-exclamation-triangle mr-1" />Error logging in. Please try again.</Alert>
                                         </Form.Group>
                                     ) : null
                                 }
@@ -126,6 +132,9 @@ class LoginForm extends React.Component {
                         </Col>
                         <Col md={3} />
                     </Row>
+                    {/* <Row>
+                        <Button onClick={testAuthentication}>Test Authentication</Button>
+                    </Row> */}
                 </Container>
             </div>
         )
