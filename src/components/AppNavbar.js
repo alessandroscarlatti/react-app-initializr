@@ -47,9 +47,9 @@ export default class AppNavbar extends React.Component {
                                             asdfdsasdf
                                     </Dropdown.Item> */}
                                     <Nav className="flex-column">
-                                        <Nav.Link href="#">
-                                            <span className="fas fa-sign-out-alt"></span>
-                                            <span>Logout</span>
+                                        <Nav.Link href="#/login">
+                                            <span className="fas fa-sign-in-alt mr-1"></span>
+                                            <span>Login</span>
                                         </Nav.Link>
                                     </Nav>
                                 </Dropdown.Menu>
