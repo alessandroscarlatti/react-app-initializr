@@ -3,12 +3,14 @@ import ReactDOM from 'react-dom';
 import homeActivity from './components/HomeActivity'
 import page1Activity from './components/Page1Activity'
 import searchActivity from './components/SearchActivity'
+import loginActivity from './components/LoginActivity'
 import AppWithActivities from './components/AppWithActivities'
 
 const activities = [
     homeActivity,
     page1Activity,
-    searchActivity
+    loginActivity,
+    searchActivity,
 ]
 
 ReactDOM.render(

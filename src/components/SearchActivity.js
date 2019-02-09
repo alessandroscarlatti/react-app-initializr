@@ -7,7 +7,8 @@ import InputGroup from 'react-bootstrap/InputGroup'
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
-import { Typeahead, Highlighter } from 'react-bootstrap-typeahead'
+import { Typeahead, Highlighter} from 'react-bootstrap-typeahead'
+import { withRouter } from 'react-router-dom'
 
 const navbarComponent = (props) => {
 
@@ -25,15 +26,25 @@ const navbarComponent = (props) => {
         }
     })
 
+    let TypeaheadComponent = withRouter(({ history }) => (
+        <Typeahead
+            labelKey={(option) => option.prettyName}
+            options={activities}
+            onChange={(selectedActivity) => {
+                // Handle selections...
+                console.log("selected activity:", selectedActivity);
+                history.push(selectedActivity[0].route)
+            }}
+            renderMenuItemChildren={activityOption}
+        >
+        </Typeahead>
+    ))
+
     return (
         <Nav.Item key="navbarSearch">
             <Form inline>
                 <InputGroup>
-                    <Typeahead
-                        labelKey={(option) => option.prettyName}
-                        options={activities}
-                        renderMenuItemChildren={activityOption}
-                    />
+                    <TypeaheadComponent />
                     <InputGroup.Append>
                         <Button variant="outline-success">Search</Button>
                     </InputGroup.Append>
@@ -49,7 +60,7 @@ const activityOption = (option, props, index) => {
 
         <Container fluid>
             <Row>
-                <Col className="col-4" style={{ margin: "auto"}}>
+                <Col className="col-4" style={{ margin: "auto" }}>
                     <option.iconComponent />
                 </Col>
                 <Col className="col-8">
