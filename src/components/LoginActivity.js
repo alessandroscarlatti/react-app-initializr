@@ -131,9 +131,6 @@ class LoginForm extends React.Component {
                         </Col>
                         <Col md={3} />
                     </Row>
-                    {/* <Row>
-                        <Button onClick={testAuthentication}>Test Authentication</Button>
-                    </Row> */}
                 </Container>
             </div>
         )

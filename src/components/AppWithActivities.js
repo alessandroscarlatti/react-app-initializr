@@ -6,21 +6,17 @@ import AppTemplate from './AppTemplate'
 import AppActivity from './AppActivity'
 import ActivityNavbarComponent from './ActivityNavbarComponent'
 import { HashRouter, Route, Switch, withRouter } from 'react-router-dom'
-import AuthenticationManager from '../services/AuthenticationManager'
 import AuthenticatedActivity from './AuthenticatedActivity'
+import userActivity from './UserActivity'
 
 export default class AppWithActivities extends React.Component {
 
     constructor(props) {
         super(props)
-
-        this.authenticationManager = new AuthenticationManager();
     }
 
     render() {
         let routes = [];
-        let navbarComponents = [];
-
         let appActivities = [];
 
         let activities = this.props.activities;
@@ -32,22 +28,11 @@ export default class AppWithActivities extends React.Component {
                     activity: activity
                 }
 
-                if (activity.navbarComponent != null) {
-                    let navbarComponent = (
-                        <Nav.Item key={activity.id}>
-                            <activity.navbarComponent activities={activities} />
-                        </Nav.Item>
-                    )
-
-                    appActivity.navbarComponent = navbarComponent;
-                    navbarComponents.push(navbarComponent);
-                }
-
                 // call a function here to take care of login.
                 let AppWithActivity = () => (
-                    <AppTemplate navbarComponents={navbarComponents}>
+                    <AppTemplate activities={activities}>
                         <AppActivity>
-                            <AuthenticatedActivity activity={activity} authenticationManager={this.authenticationManager}>
+                            <AuthenticatedActivity activity={activity} authenticationManager={userActivity.authenticationManager}>
                                 <activity.activityComponent activities={activities} />
                             </AuthenticatedActivity>
                         </AppActivity>

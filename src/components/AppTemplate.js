@@ -21,7 +21,7 @@ export default class AppTemplate extends React.Component {
 
         return (
             <div>
-                <AppNavbar navbarComponents={this.props.navbarComponents} />
+                <AppNavbar activities={this.props.activities} />
                 <div>
                     {this.props.children}
                 </div>

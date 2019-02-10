@@ -34,7 +34,6 @@ const activityComponent = () => (
                 <Button variant="primary" onClick={testAuthentication}>Authentication Test</Button>
             </Col>
         </Row>
-
     </Container>
 );
 

@@ -42,7 +42,7 @@ const navbarComponent = (props) => {
 
     return (
         <Nav.Item key="navbarSearch">
-            <Form inline>
+            <Form inline className="mr-auto">
                 <InputGroup>
                     <TypeaheadComponent />
                     <InputGroup.Append>

@@ -14,11 +14,32 @@ import ActivityNavbarComponent from './ActivityNavbarComponent';
 export default class AppNavbar extends React.Component {
     render() {
         // has a list of props for all the pages...
-        let navbarComponents = [];
-        if (this.props.navbarComponents != null)
-            navbarComponents = this.props.navbarComponents;
+        let leftNavbarComponents = [];
+        let rightNavbarComponents = [];
 
-        let navbarLinks = [...navbarComponents]
+        if (this.props.activities != null) {
+            this.props.activities.forEach(activity => {
+                if (activity.navbarComponent != null) {
+                    let navbarComponent = (
+                        <Nav.Item key={activity.id}>
+                            <activity.navbarComponent activities={this.props.activities} />
+                        </Nav.Item>
+                    )
+
+                    if (activity.navbarPosition === "RIGHT") {
+                        rightNavbarComponents.push(navbarComponent);                        
+                    } else {
+                        // "LEFT" is the default position
+                        leftNavbarComponents.push(navbarComponent);
+                    }
+                }
+            });
+        }
+
+        // if (this.props.navbarComponents != null)
+        //     navbarComponents = this.props.navbarComponents;
+
+        // let navbarLinks = [...navbarComponents]
 
         return (
             <Navbar>
@@ -26,62 +47,18 @@ export default class AppNavbar extends React.Component {
                 <Navbar.Brand>local</Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
+                    {/* left-aligned nav */}
                     <Nav className="mr-auto">
-                        {navbarLinks}
+                        {leftNavbarComponents}
                     </Nav>
 
+                    {/* right-aligned nav */}
                     <Nav className="mr-sm-2">
-                        <Nav.Item>
-                            <Dropdown>
-                                <Dropdown.Toggle as={CustomToggle}>
-                                    <Button style={{ borderRadius: "50%" }} variant="outline-secondary">
-                                        <span className="far fa-user"></span>
-                                    </Button>
-
-                                </Dropdown.Toggle>
-                                <Dropdown.Menu
-                                    alignRight
-                                    id="dropdown-menu-align-right"
-                                >
-                                    {/* <Dropdown.Item eventKey="1">
-                                            asdfdsasdf
-                                    </Dropdown.Item> */}
-                                    <Nav className="flex-column">
-                                        <Nav.Link href="#/login">
-                                            <span className="fas fa-sign-in-alt mr-1"></span>
-                                            <span>Login</span>
-                                        </Nav.Link>
-                                    </Nav>
-                                </Dropdown.Menu>
-                            </Dropdown>
-
-                        </Nav.Item>
+                        {rightNavbarComponents}
                     </Nav>
 
                 </Navbar.Collapse>
             </Navbar>
         )
-    }
-}
-
-class CustomToggle extends React.Component {
-    constructor(props, context) {
-        super(props, context);
-
-        this.handleClick = this.handleClick.bind(this);
-    }
-
-    handleClick(e) {
-        e.preventDefault();
-
-        this.props.onClick(e);
-    }
-
-    render() {
-        return (
-            <a href="" onClick={this.handleClick}>
-                {this.props.children}
-            </a>
-        );
     }
 }
