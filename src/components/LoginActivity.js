@@ -27,20 +27,6 @@ function login(url = ``, params = {}) {
     })
 }
 
-function isAuthenticationSuccess(response) {
-    return (!response.url.endsWith("login?error"));
-}
-
-function testAuthentication() {
-    fetch("/secret.html")
-    .then(response => {
-        console.log("response:", response);
-    })
-    .catch(response => {
-        console.error("response:", response);
-    })
-}
-
 class LoginForm extends React.Component {
 
     constructor(props) {
@@ -51,6 +37,15 @@ class LoginForm extends React.Component {
         }
 
         this.doLogin = this.doLogin.bind(this);
+
+        this.onAuthenticationSuccess = () => { };
+        this.onAuthenticationError = () => { };
+
+        if (this.props.onAuthenticationSuccess)
+            this.onAuthenticationSuccess = this.props.onAuthenticationSuccess;
+
+        if (this.props.onAuthenticationError)
+            this.onAuthenticationError = this.props.onAuthenticationError;
     }
 
     doLogin() {
@@ -64,24 +59,28 @@ class LoginForm extends React.Component {
             })
                 .then(response => {
                     console.log("response:", response);
-                    let success = isAuthenticationSuccess(response);
+                    let success = this._isAuthenticationSuccess(response);
                     if (success) {
                         this.setState({
                             status: "SUCCESS"
-                        })
+                        }, this.onAuthenticationSuccess)
                     } else {
                         this.setState({
                             status: "ERROR"
-                        })
+                        }, this.onAuthenticationError)
                     }
                 })
                 .catch(response => {
                     console.error(response);
                     this.setState({
                         status: "ERROR"
-                    })
+                    }, this.onAuthenticationError)
                 });
         })
+    }
+
+    _isAuthenticationSuccess(response) {
+        return (!response.url.endsWith("login?error"));
     }
 
     render() {
@@ -117,14 +116,14 @@ class LoginForm extends React.Component {
                                 {
                                     this.state.status === "SUCCESS" ? (
                                         <Form.Group>
-                                            <Alert variant="success"><span className="fas fa-check mr-1" /> You are logged in.</Alert>
+                                            <Alert variant="success" dismissible><span className="fas fa-check mr-1" /> You are logged in.</Alert>
                                         </Form.Group>
                                     ) : null
                                 }
                                 {
                                     this.state.status === "ERROR" ? (
                                         <Form.Group>
-                                            <Alert variant="danger"><span className="fas fa-exclamation-triangle mr-1" />Error logging in. Please try again.</Alert>
+                                            <Alert variant="danger" dismissible><span className="fas fa-exclamation-triangle mr-1" />Error logging in. Please try again.</Alert>
                                         </Form.Group>
                                     ) : null
                                 }

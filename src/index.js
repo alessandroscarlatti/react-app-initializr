@@ -4,12 +4,14 @@ import homeActivity from './components/HomeActivity'
 import page1Activity from './components/Page1Activity'
 import searchActivity from './components/SearchActivity'
 import loginActivity from './components/LoginActivity'
+import authenticationTestActivity from './components/AuthenticationTestActivity'
 import AppWithActivities from './components/AppWithActivities'
 
 const activities = [
     homeActivity,
     page1Activity,
     loginActivity,
+    authenticationTestActivity,
     searchActivity,
 ]
 

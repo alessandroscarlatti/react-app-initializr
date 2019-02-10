@@ -1,49 +1,69 @@
 import React from 'react'
 import Button from 'react-bootstrap/Button';
 import Nav from 'react-bootstrap/Nav';
+import Alert from 'react-bootstrap/Alert';
 import AppTemplate from './AppTemplate'
 import AppActivity from './AppActivity'
 import ActivityNavbarComponent from './ActivityNavbarComponent'
-import { HashRouter, Route, withRouter } from 'react-router-dom'
+import { HashRouter, Route, Switch, withRouter } from 'react-router-dom'
+import AuthenticationManager from '../services/AuthenticationManager'
+import AuthenticatedActivity from './AuthenticatedActivity'
 
 export default class AppWithActivities extends React.Component {
 
     constructor(props) {
         super(props)
+
+        this.authenticationManager = new AuthenticationManager();
     }
 
     render() {
         let routes = [];
         let navbarComponents = [];
 
+        let appActivities = [];
+
         let activities = this.props.activities;
 
         if (activities != null) {
             activities.forEach(activity => {
+
+                let appActivity = {
+                    activity: activity
+                }
+
                 if (activity.navbarComponent != null) {
-                    navbarComponents.push(
+                    let navbarComponent = (
                         <Nav.Item key={activity.id}>
                             <activity.navbarComponent activities={activities} />
                         </Nav.Item>
                     )
+
+                    appActivity.navbarComponent = navbarComponent;
+                    navbarComponents.push(navbarComponent);
                 }
+
+                // call a function here to take care of login.
+                let AppWithActivity = () => (
+                    <AppTemplate navbarComponents={navbarComponents}>
+                        <AppActivity>
+                            <AuthenticatedActivity activity={activity} authenticationManager={this.authenticationManager}>
+                                <activity.activityComponent activities={activities} />
+                            </AuthenticatedActivity>
+                        </AppActivity>
+                    </AppTemplate >
+                );
+
+                let routeComponent = (
+                    <Route exact key={activity.id} path={activity.route} component={AppWithActivity} />
+                );
+
+                appActivity.routeComponent = routeComponent;
+                routes.push(routeComponent);
             });
         }
 
-        activities.forEach(activity => {
-
-            let AppTemplateComponent = () => (
-                <AppTemplate navbarComponents={navbarComponents}>
-                    <AppActivity>
-                        <activity.activityComponent activities={activities} />
-                    </AppActivity>
-                </AppTemplate >
-            );
-
-            routes.push(
-                <Route exact key={activity.id} path={activity.route} component={AppTemplateComponent} />
-            )
-        });
+        // need to connect Route component and Navbar component
 
         // <HashRouter>
         //     <div>
@@ -53,57 +73,12 @@ export default class AppWithActivities extends React.Component {
         //     </div>
         // </HashRouter>
 
-        let RouterWithLoginComponent = withRouter(RouterWithLogin);
-
         return (
             <HashRouter>
-                {/* TODO what I'd like to do is check whether or not the user is authenticated.  And if not, send them to the login page */}
-                <RouterWithLoginComponent routes={routes} />
+                <Switch>
+                    {routes}
+                </Switch>
             </HashRouter>
-        )
-    }
-}
-
-class RouterWithLogin extends React.Component {
-    componentDidMount() {
-        function checkAuthentication(url = ``) {
-            // Default options are marked with *
-            return fetch(url, {
-                method: "GET", // *GET, POST, PUT, DELETE, etc.
-                mode: "cors", // no-cors, cors, *same-origin
-                cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-                credentials: "same-origin", // include, *same-origin, omit
-                headers: {
-                    "Content-Type": "application/json",
-                    // "Content-Type": "application/x-www-form-urlencoded",
-                },
-                redirect: "follow", // manual, *follow, error
-                referrer: "no-referrer", // no-referrer, *client
-            })
-        }
-
-        function isAuthenticationSuccess(response) {
-            return (!response.url.endsWith("login"));
-        }
-
-        checkAuthentication(`/secret.html`)
-            .then(response => {
-                console.log("response:", response);
-                let success = isAuthenticationSuccess(response);
-                if (success) {
-                    console.log("logged in.")
-                } else {
-                    this.props.history.push("/login");
-                }
-            })
-            .catch(response => console.error(response));
-    }
-
-    render() {
-        return (
-            <div>
-                {this.props.routes}
-            </div>
         )
     }
 }

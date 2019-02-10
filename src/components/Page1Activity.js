@@ -14,5 +14,7 @@ export default {
     prettyName: "Page 1",
     route: "/page1",
     activityComponent: activityComponent,
-    navbarComponent: navbarComponent
+    navbarComponent: navbarComponent,
+    requiresAuthentication: true,
+    rolesPermitted: ["USER"]
 }
