@@ -28,7 +28,31 @@ export default class AppWithActivities extends React.Component {
                     activity: activity
                 }
 
-                // call a function here to take care of login.
+                // the app can have an API object injected into it that
+                // handles events like commands to display a certain activity...
+                // the command is something like
+                // what we are doing is publishing an event to the redux store...
+                // app.displayActivity({
+                //     route: "/activity1/things/1/stuff",  // if null, route does not change...
+                //     uiComponent: <div>asdf</div>
+                // })
+                // as a redux event:
+                //
+                // {
+                //     type: "DISPLAY_ACTIVITY",
+                //     route: "/activity1/things/1/stuff",
+                //     uiComponent: <div>asdf</div>
+                // }
+                //
+                // What if we can only display activities?
+                // If we are adding this route, but it is not available
+                // when loading the normal page, we won't be able to load this view for the user!
+                // an activity UI component is already a component that has props...
+                // technically all the props could be passed THROUGH an activity constructor.
+                // This would be a pattern of creating new instances of activities every time.
+                // But what if we wanted to reuse an activity?
+                // We would need to change its state through a redux event.
+                // Then we could tell the app to display that instance.
                 let AppWithActivity = () => (
                     <AppTemplate activities={activities}>
                         <AppActivity>

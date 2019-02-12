@@ -10,6 +10,21 @@ import AuthenticationManager from '../services/AuthenticationManager'
 
 const AUTHENTICATION_MANAGER = new AuthenticationManager();
 
+// where does this really go?
+function logout(url = "") {
+    return fetch(url, {
+        method: "POST", // *GET, POST, PUT, DELETE, etc.
+        mode: "cors", // no-cors, cors, *same-origin
+        cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+        credentials: "include", // include, *same-origin, omit
+        headers: {
+            // "Content-Type": "application/x-www-form-urlencoded",
+        },
+        redirect: "follow", // manual, *follow, error
+        referrer: "no-referrer", // no-referrer, *client
+    })
+}
+
 class UserNavIcon extends React.Component {
 
     constructor(props) {
@@ -21,6 +36,7 @@ class UserNavIcon extends React.Component {
         this.UserDropdownMenu = this.UserDropdownMenu.bind(this);
         this.onAuthenticated = this.onAuthenticated.bind(this);
         this.onNotAuthenticated = this.onNotAuthenticated.bind(this);
+        this._doLogout = this._doLogout.bind(this);
     }
 
     componentDidMount() {
@@ -37,6 +53,23 @@ class UserNavIcon extends React.Component {
     onNotAuthenticated() {
         this.setState({
             authenticationStatus: "NOT_AUTHENTICATED"
+        })
+    }
+
+    _doLogout() {
+        this.setState({
+            authenticationStatus: "AUTHENTICATING"
+        }, () => {
+            logout("/logout")
+            .then(result => {
+                console.log("logout:", result);
+                this.setState({
+                    authenticationStatus: "NOT_AUTHENTICATED"
+                })
+            })
+            .catch(result => {
+                console.error("logout:", result);
+            })
         })
     }
 
@@ -74,7 +107,7 @@ class UserNavIcon extends React.Component {
                     </Nav.Link>
                 )
                 links.push(
-                    <Nav.Link href="#/login" key="logout">
+                    <Nav.Link onClick={this._doLogout} key="logout">
                         <span className="fas fa-sign-out-alt mr-1" />
                         <span>Logout</span>
                     </Nav.Link>
